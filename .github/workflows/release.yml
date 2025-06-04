@@ -40,6 +40,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
+      - name: Get Version
+        id: package_version
+        run: echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+      
       - name: Create Release
         shell: bash
         run: |
@@ -63,7 +67,7 @@ jobs:
           draft: false
           prerelease: false
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag_name: ${{ env.NEW_VERSION }}
+          tag_name: v${{ env.VERSION }}
       
   build:
     needs: release
