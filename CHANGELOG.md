@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.6](https://github.com/ylongwang2782/SerialLogViewer/compare/v1.0.5...v1.0.6) (2025-06-04)
+
+
+### 🔧 Chores
+
+* **ci:** 删除了macos和Linux平台的自动编译选项，并且尝试修复自动创建的release的标题错误问题 ([811c879](https://github.com/ylongwang2782/SerialLogViewer/commit/811c87985ac465b9137d93c232d84a37cc09d7bf))
+
 ### [1.0.5](https://github.com/ylongwang2782/SerialLogViewer/compare/v1.0.4...v1.0.5) (2025-06-04)
 
 
