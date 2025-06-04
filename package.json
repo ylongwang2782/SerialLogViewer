@@ -1,6 +1,6 @@
 {
   "name": "seriallog-viewer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A powerful serial port log viewer with filtering and export capabilities",
   "main": "main.js",
   "scripts": {
@@ -35,13 +35,20 @@
       "output": "dist_electron"
     },
     "win": {
-      "target": ["nsis", "portable"]
+      "target": [
+        "nsis",
+        "portable"
+      ]
     },
     "mac": {
-      "target": ["dmg"]
+      "target": [
+        "dmg"
+      ]
     },
     "linux": {
-      "target": ["AppImage"]
+      "target": [
+        "AppImage"
+      ]
     }
   },
   "repository": {
@@ -56,4 +63,4 @@
   ],
   "author": "",
   "license": "MIT"
-} 
+}
