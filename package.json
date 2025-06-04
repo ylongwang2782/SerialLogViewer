@@ -1,6 +1,6 @@
 {
   "name": "seriallog-viewer",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A powerful serial port log viewer with filtering and export capabilities",
   "main": "main.js",
   "scripts": {
