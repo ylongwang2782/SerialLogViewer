@@ -2,7 +2,7 @@
     <div class="serial-port-assistant">
         <el-container>
             <el-header>
-                <el-row :gutter="20">
+                <el-row :gutter="20" class="mb-20">
                     <el-col :span="8">
                         <el-select v-model="selectedPort" placeholder="选择串口" style="width: 100%">
                             <el-option v-for="port in ports" :key="port.path"
@@ -27,27 +27,29 @@
                         <el-button type="primary" @click="exportLogs">导出日志</el-button>
                     </el-col>
                 </el-row>
+                <el-row :gutter="20">
+                    <el-col :span="24">
+                        <div class="filter-bar">
+                            <el-input v-model="searchText" placeholder="搜索日志" prefix-icon="el-icon-search" clearable
+                                @clear="filterLogs" @input="filterLogs" style="width: 200px" />
+                            <el-select v-model="selectedLogLevel" placeholder="日志等级" clearable @change="filterLogs"
+                                style="width: 120px">
+                                <el-option v-for="level in logLevels" :key="level" :label="level" :value="level" />
+                            </el-select>
+                            <el-select v-model="selectedTag" placeholder="TAG" clearable @change="filterLogs"
+                                style="width: 150px">
+                                <el-option v-for="tag in availableTags" :key="tag" :label="tag" :value="tag" />
+                            </el-select>
+                            <el-checkbox v-model="showHexOutput">HEX显示</el-checkbox>
+                            <el-button size="small" @click="clearOutput">清空</el-button>
+                        </div>
+                    </el-col>
+                </el-row>
             </el-header>
 
             <el-main>
                 <div class="serial-content">
                     <div class="output-window">
-                        <div class="window-header">
-                            <div class="filter-bar">
-                                <el-input v-model="searchText" placeholder="搜索日志" prefix-icon="el-icon-search" clearable
-                                    @clear="filterLogs" @input="filterLogs" style="width: 200px" />
-                                <el-select v-model="selectedLogLevel" placeholder="日志等级" clearable @change="filterLogs"
-                                    style="width: 120px">
-                                    <el-option v-for="level in logLevels" :key="level" :label="level" :value="level" />
-                                </el-select>
-                                <el-select v-model="selectedTag" placeholder="TAG" clearable @change="filterLogs"
-                                    style="width: 150px">
-                                    <el-option v-for="tag in availableTags" :key="tag" :label="tag" :value="tag" />
-                                </el-select>
-                                <el-checkbox v-model="showHexOutput">HEX显示</el-checkbox>
-                                <el-button size="small" @click="clearOutput">清空</el-button>
-                            </div>
-                        </div>
                         <div class="log-table-container" ref="logContainer">
                             <el-table :data="filteredLogs" style="width: 100%" size="small" height="100%" border>
                                 <el-table-column prop="timestamp" label="时间戳" min-width="100" resizable />
@@ -76,7 +78,7 @@ export default {
     setup() {
         const ports = ref([]);
         const selectedPort = ref('');
-        const baudRate = ref('9600');
+        const baudRate = ref('115200');
         const isConnected = ref(false);
         const inputText = ref('');
         const showHexOutput = ref(false);
@@ -319,31 +321,23 @@ export default {
 
 .el-header {
     padding: 20px 0;
+    height: auto !important;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
 }
 
 .serial-content {
     display: flex;
     flex-direction: column;
-    gap: 20px;
     height: 100%;
-}
-
-.output-window,
-.input-window {
-    width: 100%;
 }
 
 .output-window {
     flex: 1;
     display: flex;
     flex-direction: column;
-}
-
-.window-header {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 10px;
 }
 
 .filter-bar {
