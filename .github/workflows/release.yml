@@ -29,14 +29,16 @@ jobs:
         run: npm ci
       
       - name: Setup Git
+        shell: bash
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/ylongwang2782/SerialLogViewer.git
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Create Release
+        shell: bash
         run: |
           npm run release
           git push --follow-tags origin main
