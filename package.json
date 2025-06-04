@@ -54,7 +54,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/seriallog-viewer.git"
+    "url": "git+https://github.com/ylongwang2782/SerialLogViewer.git"
   },
   "keywords": [
     "serial-port",
