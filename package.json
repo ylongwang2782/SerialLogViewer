@@ -1,0 +1,59 @@
+{
+  "name": "seriallog-viewer",
+  "version": "1.0.0",
+  "description": "A powerful serial port log viewer with filtering and export capabilities",
+  "main": "main.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "electron:dev": "electron .",
+    "electron:build": "electron-builder",
+    "prepare": "husky install",
+    "release": "standard-version",
+    "postrelease": "git push --follow-tags origin main"
+  },
+  "dependencies": {
+    "vue": "^3.3.4",
+    "element-plus": "^2.3.8",
+    "serialport": "^12.0.0",
+    "@serialport/parser-readline": "^12.0.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.0.0",
+    "@commitlint/config-conventional": "^17.0.0",
+    "@vitejs/plugin-vue": "^4.2.3",
+    "electron": "^25.3.1",
+    "electron-builder": "^24.6.3",
+    "husky": "^8.0.0",
+    "standard-version": "^9.5.0",
+    "vite": "^4.4.7"
+  },
+  "build": {
+    "appId": "com.seriallog.viewer",
+    "productName": "SerialLog Viewer",
+    "directories": {
+      "output": "dist_electron"
+    },
+    "win": {
+      "target": ["nsis", "portable"]
+    },
+    "mac": {
+      "target": ["dmg"]
+    },
+    "linux": {
+      "target": ["AppImage"]
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/seriallog-viewer.git"
+  },
+  "keywords": [
+    "serial-port",
+    "log-viewer",
+    "electron",
+    "vue"
+  ],
+  "author": "",
+  "license": "MIT"
+} 
