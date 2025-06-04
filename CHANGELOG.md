@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.2](https://github.com/yourusername/seriallog-viewer/compare/v1.0.1...v1.0.2) (2025-06-04)
+
+
+### 🔧 Chores
+
+* 修复了release.yml中仓库地址错误的问题 ([34cea0c](https://github.com/yourusername/seriallog-viewer/commit/34cea0c8dc57bdb75d6acf39a1814c758a7ca290))
+* 移除了mac和 Linux的构建配置，修复认证问题 ([c47ee54](https://github.com/yourusername/seriallog-viewer/commit/c47ee54065437fccb40d4236d3d52d6482f21938))
+
 ### 1.0.1 (2025-06-04)
 
 
