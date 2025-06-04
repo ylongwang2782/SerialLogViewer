@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.7](https://github.com/ylongwang2782/SerialLogViewer/compare/v1.0.6...v1.0.7) (2025-06-04)
+
+
+### 🔧 Chores
+
+* **ci:** 尝试修复自动发布release中版本滞后的问题 ([58c58d3](https://github.com/ylongwang2782/SerialLogViewer/commit/58c58d32ec2b3bf29dab4ecd7b6bc00a82581d2a))
+
 ### [1.0.6](https://github.com/ylongwang2782/SerialLogViewer/compare/v1.0.5...v1.0.6) (2025-06-04)
 
 
