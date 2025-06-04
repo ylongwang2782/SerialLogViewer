@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.3](https://github.com/yourusername/seriallog-viewer/compare/v1.0.2...v1.0.3) (2025-06-04)
+
+
+### 🐛 Bug Fixes
+
+* update the icon ([0316b1f](https://github.com/yourusername/seriallog-viewer/commit/0316b1f05951fb680448a34d4561e7bf2d964a33))
+
 ### [1.0.2](https://github.com/yourusername/seriallog-viewer/compare/v1.0.1...v1.0.2) (2025-06-04)
 
 
