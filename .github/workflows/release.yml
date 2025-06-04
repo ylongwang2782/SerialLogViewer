@@ -40,12 +40,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Get Version
-        id: package_version
-        run: |
-            echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
-        shell: bash
-      
       - name: Create Release
         shell: bash
         run: |
@@ -53,6 +47,12 @@ jobs:
           git push --follow-tags origin main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get Version
+        id: package_version
+        run: |
+            echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+        shell: bash
       
       - name: Build Application
         run: |
