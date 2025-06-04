@@ -5,12 +5,9 @@
                 <el-row :gutter="20">
                     <el-col :span="8">
                         <el-select v-model="selectedPort" placeholder="选择串口" style="width: 100%">
-                            <el-option
-                                v-for="port in ports"
-                                :key="port.path"
+                            <el-option v-for="port in ports" :key="port.path"
                                 :label="port.path + (port.description ? ` (${port.description})` : '')"
-                                :value="port.path"
-                            />
+                                :value="port.path" />
                         </el-select>
                     </el-col>
                     <el-col :span="4">
@@ -37,55 +34,22 @@
                     <div class="output-window">
                         <div class="window-header">
                             <div class="filter-bar">
-                                <el-input
-                                    v-model="searchText"
-                                    placeholder="搜索日志"
-                                    prefix-icon="el-icon-search"
-                                    clearable
-                                    @clear="filterLogs"
-                                    @input="filterLogs"
-                                    style="width: 200px"
-                                />
-                                <el-select
-                                    v-model="selectedLogLevel"
-                                    placeholder="日志等级"
-                                    clearable
-                                    @change="filterLogs"
-                                    style="width: 120px"
-                                >
-                                    <el-option
-                                        v-for="level in logLevels"
-                                        :key="level"
-                                        :label="level"
-                                        :value="level"
-                                    />
+                                <el-input v-model="searchText" placeholder="搜索日志" prefix-icon="el-icon-search" clearable
+                                    @clear="filterLogs" @input="filterLogs" style="width: 200px" />
+                                <el-select v-model="selectedLogLevel" placeholder="日志等级" clearable @change="filterLogs"
+                                    style="width: 120px">
+                                    <el-option v-for="level in logLevels" :key="level" :label="level" :value="level" />
                                 </el-select>
-                                <el-select
-                                    v-model="selectedTag"
-                                    placeholder="TAG"
-                                    clearable
-                                    @change="filterLogs"
-                                    style="width: 150px"
-                                >
-                                    <el-option
-                                        v-for="tag in availableTags"
-                                        :key="tag"
-                                        :label="tag"
-                                        :value="tag"
-                                    />
+                                <el-select v-model="selectedTag" placeholder="TAG" clearable @change="filterLogs"
+                                    style="width: 150px">
+                                    <el-option v-for="tag in availableTags" :key="tag" :label="tag" :value="tag" />
                                 </el-select>
                                 <el-checkbox v-model="showHexOutput">HEX显示</el-checkbox>
                                 <el-button size="small" @click="clearOutput">清空</el-button>
                             </div>
                         </div>
                         <div class="log-table-container" ref="logContainer">
-                            <el-table
-                                :data="filteredLogs"
-                                style="width: 100%"
-                                size="small"
-                                height="100%"
-                                border
-                            >
+                            <el-table :data="filteredLogs" style="width: 100%" size="small" height="100%" border>
                                 <el-table-column prop="timestamp" label="时间戳" min-width="100" resizable />
                                 <el-table-column prop="level" label="等级" min-width="80" resizable>
                                     <template #default="{ row }">
@@ -96,18 +60,6 @@
                                 <el-table-column prop="content" label="内容" min-width="300" resizable />
                             </el-table>
                         </div>
-                    </div>
-
-                    <div class="input-window">
-                        <div class="window-header">
-                            <span>输入窗口</span>
-                            <el-checkbox v-model="sendHex">HEX发送</el-checkbox>
-                        </div>
-                        <el-input v-model="inputText" type="textarea" :rows="5"
-                            :placeholder="sendHex ? '请输入十六进制数据，如：AA BB CC' : '请输入要发送的数据'" />
-                        <el-button type="primary" @click="sendData" :disabled="!isConnected">
-                            发送
-                        </el-button>
                     </div>
                 </div>
             </el-main>
@@ -191,7 +143,7 @@ export default {
 
         const baudRates = [
             '110', '300', '600', '1200', '2400', '4800', '9600',
-            '14400', '19200', '38400', '57600', '115200', '128000', '256000', '921600'
+            '14400', '19200', '38400', '57600', '115200', '128000', '256000', '460800', '500000', '512000', '600000', '750000', '921600', '1500000', '2000000'
         ];
 
         const scanPorts = async () => {
@@ -255,7 +207,7 @@ export default {
             const lines = dataBuffer.value.split('\n');
             // 保留最后一个可能不完整的行
             dataBuffer.value = lines[lines.length - 1];
-            
+
             // 处理完整的行
             for (let i = 0; i < lines.length - 1; i++) {
                 const line = lines[i].trim();
@@ -304,10 +256,10 @@ export default {
         const exportLogs = () => {
             const now = new Date();
             const timestamp = now.toISOString().replace(/[:.]/g, '-').slice(0, 19);
-            const csvContent = filteredLogs.value.map(log => 
+            const csvContent = filteredLogs.value.map(log =>
                 `${log.timestamp},${log.level},${log.tag},"${log.content.replace(/"/g, '""')}"`
             ).join('\n');
-            
+
             const header = 'Timestamp,Level,Tag,Content\n';
             const blob = new Blob([header + csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
