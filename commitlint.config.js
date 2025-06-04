@@ -17,7 +17,7 @@ module.exports = {
         'ci'        // CI配置相关
       ]
     ],
-    'type-case': [2, 'always', 'lower'],
+    'type-case': [2, 'always', 'lowercase'],
     'subject-case': [0]
   }
 }; 
