@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.4](https://github.com/ylongwang2782/SerialLogViewer/compare/v1.0.3...v1.0.4) (2025-06-04)
+
+
+### 🔧 Chores
+
+* 更新了yml中仓库地址，尝试解决Github action build报错 ([67afd60](https://github.com/ylongwang2782/SerialLogViewer/commit/67afd60f1c16491dce2c9332843e42e1efb34054))
+
 ### [1.0.3](https://github.com/yourusername/seriallog-viewer/compare/v1.0.2...v1.0.3) (2025-06-04)
 
 
