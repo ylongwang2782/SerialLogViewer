@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.8](https://github.com/ylongwang2782/SerialLogViewer/compare/v1.0.7...v1.0.8) (2025-06-04)
+
+
+### 🔧 Chores
+
+* 修改应用程序显示名称 ([e05e96f](https://github.com/ylongwang2782/SerialLogViewer/commit/e05e96f6f6c8fb5cb11de9f07f0f4481e1d3fb03))
+* 删除了界面中的输入窗口 ([5f778e0](https://github.com/ylongwang2782/SerialLogViewer/commit/5f778e03912a9578dd7bc4279dff2bec62025413))
+
 ### [1.0.7](https://github.com/ylongwang2782/SerialLogViewer/compare/v1.0.6...v1.0.7) (2025-06-04)
 
 
