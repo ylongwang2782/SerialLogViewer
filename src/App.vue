@@ -40,6 +40,9 @@
                                 style="width: 150px">
                                 <el-option v-for="tag in availableTags" :key="tag" :label="tag" :value="tag" />
                             </el-select>
+                            <el-select v-model="pageSize" placeholder="每页显示" style="width: 120px" @change="handlePageSizeChange">
+                                <el-option v-for="size in pageSizes" :key="size" :label="`${size}条/页`" :value="size" />
+                            </el-select>
                             <el-checkbox v-model="showHexOutput">HEX显示</el-checkbox>
                             <el-button size="small" @click="clearOutput">清空</el-button>
                         </div>
@@ -51,7 +54,7 @@
                 <div class="serial-content">
                     <div class="output-window">
                         <div class="log-table-container" ref="logContainer">
-                            <el-table :data="filteredLogs" style="width: 100%" size="small" height="100%" border>
+                            <el-table :data="paginatedLogs" style="width: 100%" size="small" height="100%" border>
                                 <el-table-column prop="timestamp" label="时间戳" min-width="100" resizable />
                                 <el-table-column prop="level" label="等级" min-width="80" resizable>
                                     <template #default="{ row }">
@@ -61,6 +64,17 @@
                                 <el-table-column prop="tag" label="TAG" min-width="150" resizable />
                                 <el-table-column prop="content" label="内容" min-width="300" resizable />
                             </el-table>
+                            <div class="pagination-container">
+                                <el-pagination
+                                    v-model:current-page="currentPage"
+                                    v-model:page-size="pageSize"
+                                    :page-sizes="pageSizes"
+                                    :total="filteredLogs.length"
+                                    layout="total, sizes, prev, pager, next, jumper"
+                                    @size-change="handlePageSizeChange"
+                                    @current-change="handleCurrentPageChange"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -187,6 +201,7 @@ export default {
 
         const clearOutput = () => {
             logs.value = [];
+            currentPage.value = 1;  // 清空日志时重置页码
         };
 
         const processBuffer = () => {
@@ -201,7 +216,7 @@ export default {
                     if (showHexOutput.value) {
                         const hexData = Array.from(Buffer.from(line)).map(b => b.toString(16).padStart(2, '0').toUpperCase()).join(' ');
                         logs.value.push({
-                            timestamp: new Date().getTime() / 1000,
+                            timestamp: new Date().toLocaleTimeString(),
                             level: 'D',
                             tag: 'HEX',
                             content: hexData
@@ -212,7 +227,7 @@ export default {
                             logs.value.push(parsedLog);
                         } else {
                             logs.value.push({
-                                timestamp: new Date().getTime() / 1000,
+                                timestamp: new Date().toLocaleTimeString(),
                                 level: 'I',
                                 tag: 'TEXT',
                                 content: line
@@ -222,15 +237,11 @@ export default {
                 }
             }
 
-            // 自动滚动到底部
-            setTimeout(() => {
-                if (logContainer.value) {
-                    const table = logContainer.value.querySelector('.el-table__body-wrapper');
-                    if (table) {
-                        table.scrollTop = table.scrollHeight;
-                    }
-                }
-            }, 100);
+            // 如果在最后一页，自动跳转到新的最后一页
+            const maxPage = Math.ceil(filteredLogs.value.length / pageSize.value);
+            if (currentPage.value === maxPage || currentPage.value === maxPage - 1) {
+                currentPage.value = Math.ceil(logs.value.length / pageSize.value);
+            }
         };
 
         const handleSerialData = (event, data) => {
@@ -253,6 +264,29 @@ export default {
             link.download = `logs_${timestamp}.csv`;
             link.click();
             URL.revokeObjectURL(link.href);
+        };
+
+        const pageSize = ref(50);  // 默认每页显示50条
+        const currentPage = ref(1);
+        const pageSizes = [20, 50, 100, 200, 500];  // 可选的每页显示数量
+
+        const paginatedLogs = computed(() => {
+            const start = (currentPage.value - 1) * pageSize.value;
+            const end = start + pageSize.value;
+            return filteredLogs.value.slice(start, end);
+        });
+
+        const handlePageSizeChange = (newSize) => {
+            pageSize.value = newSize;
+            // 当页大小改变时，可能需要调整当前页码以确保数据正确显示
+            const maxPage = Math.ceil(filteredLogs.value.length / newSize);
+            if (currentPage.value > maxPage) {
+                currentPage.value = maxPage;
+            }
+        };
+
+        const handleCurrentPageChange = (newPage) => {
+            currentPage.value = newPage;
         };
 
         onMounted(() => {
@@ -284,7 +318,13 @@ export default {
             logLevels,
             availableTags,
             filterLogs,
-            exportLogs
+            exportLogs,
+            pageSize,
+            currentPage,
+            pageSizes,
+            paginatedLogs,
+            handlePageSizeChange,
+            handleCurrentPageChange
         };
     }
 };
@@ -402,5 +442,31 @@ export default {
 
 .el-table__column-resize-proxy {
     background-color: #409EFF;
+}
+
+.pagination-container {
+    padding: 10px;
+    background: #fff;
+    display: flex;
+    justify-content: flex-end;
+    border-top: 1px solid #EBEEF5;
+}
+
+.log-table-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.el-table {
+    flex: 1;
+    overflow: hidden;
+}
+
+/* 确保分页控件不会被表格遮挡 */
+.el-pagination {
+    margin-top: 10px;
+    padding: 0;
+    z-index: 1;
 }
 </style>
