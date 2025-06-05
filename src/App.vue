@@ -185,22 +185,6 @@ export default {
             }
         };
 
-        const sendData = async () => {
-            if (!inputText.value.trim()) {
-                ElMessage.warning('请输入要发送的数据');
-                return;
-            }
-
-            const result = await window.electronAPI.sendData({
-                data: inputText.value,
-                isHex: sendHex.value
-            });
-
-            if (!result.success) {
-                ElMessage.error('发送数据失败：' + result.error);
-            }
-        };
-
         const clearOutput = () => {
             logs.value = [];
         };
@@ -291,7 +275,6 @@ export default {
             sendHex,
             scanPorts,
             toggleConnection,
-            sendData,
             clearOutput,
             logContainer,
             filteredLogs,
