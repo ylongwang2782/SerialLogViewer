@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.10](https://github.com/ylongwang2782/SerialLogViewer/compare/v1.0.9...v1.0.10) (2025-06-05)
+
+
+### 🐛 Bug Fixes
+
+* 修复了滚动时 filterbar也会一起滚动的错误 ([2725566](https://github.com/ylongwang2782/SerialLogViewer/commit/272556644c326625edfc68918f64509aabb945c8))
+
 ### [1.0.9](https://github.com/ylongwang2782/SerialLogViewer/compare/v1.0.8...v1.0.9) (2025-06-04)
 
 ### [1.0.8](https://github.com/ylongwang2782/SerialLogViewer/compare/v1.0.7...v1.0.8) (2025-06-04)
