@@ -292,19 +292,47 @@ export default {
 
 <style>
 .serial-port-assistant {
-    padding: 20px;
-    height: 100vh;
+    position: fixed;  /* 使用固定定位铺满整个窗口 */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
 .el-container {
     height: 100%;
+    padding: 20px;
+}
+
+/* 添加全局样式 */
+:deep(html),
+:deep(body) {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+:deep(#app) {
+    height: 100%;
+    overflow: hidden;
 }
 
 .el-header {
-    padding: 20px 0;
+    padding: 0 0 20px 0 !important;
     height: auto !important;
+    flex-shrink: 0;
+}
+
+.el-main {
+    padding: 0 !important;
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .mb-20 {
@@ -312,26 +340,30 @@ export default {
 }
 
 .serial-content {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    height: 100%;
+    min-height: 0; /* 重要：允许flex子项收缩 */
 }
 
 .output-window {
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-height: 0; /* 重要：允许flex子项收缩 */
 }
 
 .filter-bar {
     display: flex;
     gap: 10px;
     align-items: center;
+    margin-bottom: 10px;
 }
 
 .log-table-container {
     flex: 1;
     overflow: hidden;
+    min-height: 0; /* 重要：允许flex子项收缩 */
 }
 
 .el-textarea {
@@ -361,7 +393,7 @@ export default {
 
 /* 表格样式优化 */
 .el-table {
-    font-family: monospace;
+    height: 100% !important;
 }
 
 .el-table .el-table__body-wrapper {
