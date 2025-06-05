@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, shell } = require('electron');
 const { SerialPort } = require('serialport');
 const path = require('path');
 
@@ -92,6 +92,16 @@ ipcMain.handle('send-data', async (event, { data, isHex }) => {
     }
 
     await serialPort.write(buffer);
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+});
+
+// 添加打开外部链接的处理
+ipcMain.handle('open-external', async (event, url) => {
+  try {
+    await shell.openExternal(url);
     return { success: true };
   } catch (error) {
     return { success: false, error: error.message };

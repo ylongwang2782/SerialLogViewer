@@ -6,5 +6,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   closePort: () => ipcRenderer.invoke('close-port'),
   sendData: (data) => ipcRenderer.invoke('send-data', data),
   onSerialData: (callback) => ipcRenderer.on('serial-data', callback),
-  removeSerialDataListener: () => ipcRenderer.removeAllListeners('serial-data')
+  removeSerialDataListener: () => ipcRenderer.removeAllListeners('serial-data'),
+  openExternal: (url) => ipcRenderer.invoke('open-external', url)
 }); 

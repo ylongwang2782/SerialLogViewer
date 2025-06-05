@@ -40,11 +40,17 @@
                                 style="width: 150px">
                                 <el-option v-for="tag in availableTags" :key="tag" :label="tag" :value="tag" />
                             </el-select>
-                            <el-select v-model="pageSize" placeholder="每页显示" style="width: 120px" @change="handlePageSizeChange">
-                                <el-option v-for="size in pageSizes" :key="size" :label="`${size}条/页`" :value="size" />
-                            </el-select>
+                            <el-input-number 
+                                v-model="pageSize" 
+                                :min="1" 
+                                :max="1000"
+                                placeholder="每页显示条数"
+                                style="width: 120px"
+                                @change="handlePageSizeChange"
+                            />
                             <el-checkbox v-model="showHexOutput">HEX显示</el-checkbox>
                             <el-button size="small" @click="clearOutput">清空</el-button>
+                            <el-button size="small" @click="showAboutDialog">关于</el-button>
                         </div>
                     </el-col>
                 </el-row>
@@ -79,6 +85,31 @@
                     </div>
                 </div>
             </el-main>
+
+            <!-- 关于对话框 -->
+            <el-dialog
+                v-model="aboutDialogVisible"
+                title="关于"
+                width="400px"
+                align-center
+            >
+                <div class="about-content">
+                    <h2>串口调试助手</h2>
+                    <p>版本：v1.0.0</p>
+                    <p>项目地址：<a href="#" @click="openLink('https://github.com/YourUsername/WhtsPro')">GitHub</a></p>
+                    <div class="about-features">
+                        <h3>主要功能：</h3>
+                        <ul>
+                            <li>支持多种波特率</li>
+                            <li>支持日志分级显示</li>
+                            <li>支持HEX显示</li>
+                            <li>支持日志过滤和搜索</li>
+                            <li>支持日志导出</li>
+                            <li>支持自定义分页大小</li>
+                        </ul>
+                    </div>
+                </div>
+            </el-dialog>
         </el-container>
     </div>
 </template>
@@ -86,6 +117,7 @@
 <script>
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { ElMessage } from 'element-plus';
+import packageInfo from '../package.json';  // 导入package.json获取版本号
 
 export default {
     name: 'SerialPortAssistant',
@@ -289,6 +321,17 @@ export default {
             currentPage.value = newPage;
         };
 
+        const aboutDialogVisible = ref(false);
+        const version = ref(packageInfo.version);
+
+        const showAboutDialog = () => {
+            aboutDialogVisible.value = true;
+        };
+
+        const openLink = (url) => {
+            window.electronAPI.openExternal(url);
+        };
+
         onMounted(() => {
             scanPorts();
             window.electronAPI.onSerialData(handleSerialData);
@@ -324,7 +367,11 @@ export default {
             pageSizes,
             paginatedLogs,
             handlePageSizeChange,
-            handleCurrentPageChange
+            handleCurrentPageChange,
+            aboutDialogVisible,
+            showAboutDialog,
+            openLink,
+            version
         };
     }
 };
@@ -468,5 +515,61 @@ export default {
     margin-top: 10px;
     padding: 0;
     z-index: 1;
+}
+
+.about-content {
+    text-align: center;
+    padding: 20px;
+}
+
+.about-content h2 {
+    margin-bottom: 20px;
+    color: #409EFF;
+}
+
+.about-content p {
+    margin: 10px 0;
+    color: #606266;
+}
+
+.about-content a {
+    color: #409EFF;
+    text-decoration: none;
+}
+
+.about-content a:hover {
+    text-decoration: underline;
+}
+
+.about-features {
+    text-align: left;
+    margin-top: 20px;
+    padding: 15px;
+    background: #f5f7fa;
+    border-radius: 4px;
+}
+
+.about-features h3 {
+    color: #303133;
+    margin-bottom: 10px;
+}
+
+.about-features ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.about-features li {
+    margin: 8px 0;
+    color: #606266;
+    position: relative;
+    padding-left: 20px;
+}
+
+.about-features li:before {
+    content: "•";
+    color: #409EFF;
+    position: absolute;
+    left: 0;
 }
 </style>
