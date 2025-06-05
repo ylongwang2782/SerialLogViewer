@@ -51,6 +51,7 @@
                             <el-checkbox v-model="showHexOutput">HEX显示</el-checkbox>
                             <el-button size="small" @click="clearOutput">清空</el-button>
                             <el-button size="small" @click="showAboutDialog">关于</el-button>
+                            <el-button size="small" @click="showTableConfig">表格设置</el-button>
                         </div>
                     </el-col>
                 </el-row>
@@ -60,15 +61,45 @@
                 <div class="serial-content">
                     <div class="output-window">
                         <div class="log-table-container" ref="logContainer">
-                            <el-table :data="paginatedLogs" style="width: 100%" size="small" height="100%" border>
-                                <el-table-column prop="timestamp" label="时间戳" min-width="100" resizable />
-                                <el-table-column prop="level" label="等级" min-width="80" resizable>
+                            <el-table 
+                                :data="paginatedLogs" 
+                                style="width: 100%" 
+                                size="small" 
+                                height="100%" 
+                                border
+                                :style="{
+                                    fontSize: tableConfig.fontSize + 'px',
+                                    fontFamily: tableConfig.fontFamily
+                                }"
+                            >
+                                <el-table-column 
+                                    prop="timestamp" 
+                                    label="时间戳" 
+                                    :width="tableConfig.columnWidths.timestamp"
+                                    resizable 
+                                />
+                                <el-table-column 
+                                    prop="level" 
+                                    label="等级" 
+                                    :width="tableConfig.columnWidths.level"
+                                    resizable
+                                >
                                     <template #default="{ row }">
                                         <span :class="'log-level-' + row.level.toLowerCase()">{{ row.level }}</span>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="tag" label="TAG" min-width="150" resizable />
-                                <el-table-column prop="content" label="内容" min-width="300" resizable />
+                                <el-table-column 
+                                    prop="tag" 
+                                    label="TAG" 
+                                    :width="tableConfig.columnWidths.tag"
+                                    resizable 
+                                />
+                                <el-table-column 
+                                    prop="content" 
+                                    label="内容" 
+                                    :width="tableConfig.columnWidths.content"
+                                    resizable 
+                                />
                             </el-table>
                             <div class="pagination-container">
                                 <el-pagination
@@ -95,8 +126,8 @@
             >
                 <div class="about-content">
                     <h2>串口调试助手</h2>
-                    <p>版本：v1.0.0</p>
-                    <p>项目地址：<a href="#" @click="openLink('https://github.com/YourUsername/WhtsPro')">GitHub</a></p>
+                    <p>版本：v{{ version }}</p>
+                    <p>项目地址：<a href="#" @click="openLink('https://github.com/ylongwang2782/SerialLogViewer')">GitHub</a></p>
                     <div class="about-features">
                         <h3>主要功能：</h3>
                         <ul>
@@ -110,12 +141,72 @@
                     </div>
                 </div>
             </el-dialog>
+
+            <!-- 表格配置对话框 -->
+            <el-dialog
+                v-model="tableConfigVisible"
+                title="表格设置"
+                width="500px"
+            >
+                <div class="table-config">
+                    <h3>列宽设置</h3>
+                    <el-form label-width="100px">
+                        <el-form-item label="时间戳宽度">
+                            <el-input-number 
+                                v-model="tableConfig.columnWidths.timestamp" 
+                                :min="50" 
+                                :max="300"
+                            />
+                        </el-form-item>
+                        <el-form-item label="等级宽度">
+                            <el-input-number 
+                                v-model="tableConfig.columnWidths.level" 
+                                :min="50" 
+                                :max="200"
+                            />
+                        </el-form-item>
+                        <el-form-item label="TAG宽度">
+                            <el-input-number 
+                                v-model="tableConfig.columnWidths.tag" 
+                                :min="50" 
+                                :max="300"
+                            />
+                        </el-form-item>
+                        <el-form-item label="内容宽度">
+                            <el-input-number 
+                                v-model="tableConfig.columnWidths.content" 
+                                :min="100" 
+                                :max="1000"
+                            />
+                        </el-form-item>
+                    </el-form>
+
+                    <h3>字体设置</h3>
+                    <el-form label-width="100px">
+                        <el-form-item label="字体">
+                            <el-select v-model="tableConfig.fontFamily">
+                                <el-option label="默认" value="system-ui" />
+                                <el-option label="等宽字体" value="monospace" />
+                                <el-option label="微软雅黑" value="Microsoft YaHei" />
+                                <el-option label="宋体" value="SimSun" />
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="字号">
+                            <el-input-number 
+                                v-model="tableConfig.fontSize" 
+                                :min="12" 
+                                :max="20"
+                            />
+                        </el-form-item>
+                    </el-form>
+                </div>
+            </el-dialog>
         </el-container>
     </div>
 </template>
 
 <script>
-import { ref, onMounted, onUnmounted, computed } from 'vue';
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import { ElMessage } from 'element-plus';
 import packageInfo from '../package.json';  // 导入package.json获取版本号
 
@@ -332,9 +423,44 @@ export default {
             window.electronAPI.openExternal(url);
         };
 
+        const tableConfigVisible = ref(false);
+        const tableConfig = ref({
+            columnWidths: {
+                timestamp: 150,
+                level: 80,
+                tag: 150,
+                content: 400
+            },
+            fontSize: 14,
+            fontFamily: 'system-ui'
+        });
+
+        // 从localStorage加载表格配置
+        const loadTableConfig = () => {
+            const savedConfig = localStorage.getItem('tableConfig');
+            if (savedConfig) {
+                tableConfig.value = JSON.parse(savedConfig);
+            }
+        };
+
+        // 保存表格配置到localStorage
+        const saveTableConfig = () => {
+            localStorage.setItem('tableConfig', JSON.stringify(tableConfig.value));
+        };
+
+        const showTableConfig = () => {
+            tableConfigVisible.value = true;
+        };
+
+        // 监听表格配置变化并保存
+        watch(tableConfig, () => {
+            saveTableConfig();
+        }, { deep: true });
+
         onMounted(() => {
             scanPorts();
             window.electronAPI.onSerialData(handleSerialData);
+            loadTableConfig();
         });
 
         onUnmounted(() => {
@@ -371,7 +497,10 @@ export default {
             aboutDialogVisible,
             showAboutDialog,
             openLink,
-            version
+            version,
+            tableConfigVisible,
+            tableConfig,
+            showTableConfig
         };
     }
 };
@@ -571,5 +700,19 @@ export default {
     color: #409EFF;
     position: absolute;
     left: 0;
+}
+
+.table-config {
+    padding: 20px;
+}
+
+.table-config h3 {
+    margin: 20px 0 10px;
+    color: #409EFF;
+    font-size: 16px;
+}
+
+.table-config .el-form {
+    margin-top: 15px;
 }
 </style>

@@ -15,6 +15,8 @@ function createWindow() {
     }
   });
 
+  // 隐藏菜单栏
+  mainWindow.setMenuBarVisibility(false);
   mainWindow.loadFile('dist/index.html');
 }
 
