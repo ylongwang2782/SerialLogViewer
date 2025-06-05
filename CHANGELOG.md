@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.11](https://github.com/ylongwang2782/SerialLogViewer/compare/v1.0.10...v1.0.11) (2025-06-05)
+
+
+### 🐛 Bug Fixes
+
+* 日志显示行数调整为可自定义，新增关于选项可以看到软件版本和软件说明 ([07d5b84](https://github.com/ylongwang2782/SerialLogViewer/commit/07d5b844bc00656080091caf82b19fd3c557646e))
+
 ### [1.0.10](https://github.com/ylongwang2782/SerialLogViewer/compare/v1.0.9...v1.0.10) (2025-06-05)
 
 
